@@ -1,0 +1,64 @@
+{
+    "Name": "GymMode",
+    "Description": "Beginner-friendly Northstar mod",
+    "Version": "0.1.0",
+    "LoadPriority": 1,
+    "ConVars": [
+        // 1 = GymMode enabled
+        // 0 = disabled
+        {
+            "Name": "gymmode_enabled",
+            "DefaultValue": "1"
+        },
+
+        // starting health
+        {
+            "Name": "gymmode_mid_health",
+            "DefaultValue": "100"
+        },
+
+        // max health will not go above this value
+        {
+            "Name": "gymmode_max_health",
+            "DefaultValue": "200"
+        },
+
+        // max health will not go below this value
+        {
+            "Name": "gymmode_min_health",
+            "DefaultValue": "10"
+        },
+
+        // how much health to:
+        //   A) add if a player dies at middle HP or above
+        //   B) reduce if a player kills at above middle HP
+        {
+            "Name": "gymmode_above_mid_change",
+            "DefaultValue": "10"
+        },
+
+        // how much health to:
+        //   A) reduce if a player kills at middle HP or less
+        //   B) add if a player dies at below middle HP
+        {
+            "Name": "gymmode_below_mid_change",
+            "DefaultValue": "10"
+        },
+
+        // 1 = show current max health at left side of screen
+        // 0 = disabled
+        {
+            "Name": "gymmode_show_max_health",
+            "DefaultValue": "1"
+        }
+    ],
+    "Scripts": [
+        {
+            "Path": "gymmode.nut",
+            "RunOn": "SERVER",
+            "ServerCallback": {
+                "After": "GymMode_Init"
+            }
+        }
+    ]
+}
