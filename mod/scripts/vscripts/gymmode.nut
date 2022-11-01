@@ -6,8 +6,7 @@ struct {
     int midHealth
     int maxHealth
     int minHealth
-    int aboveMidChange
-    int belowMidChange
+    int healthChange
     bool showMaxHealth
 
     table<entity, int> playerMaxHealths
@@ -24,8 +23,7 @@ void function GymMode_Init()
     file.midHealth = GetConVarInt("gymmode_mid_health")
     file.maxHealth = GetConVarInt("gymmode_max_health")
     file.minHealth = GetConVarInt("gymmode_min_health")
-    file.aboveMidChange = GetConVarInt("gymmode_above_mid_change")
-    file.belowMidChange = GetConVarInt("gymmode_below_mid_change")
+    file.healthChange = GetConVarInt("gymmode_health_change")
     file.showMaxHealth = GetConVarBool("gymmode_show_max_health")
 
     AddCallback_OnClientConnected(OnClientConnected)
@@ -38,8 +36,8 @@ void function GymMode_Init()
 
 array<string> function GymMode_Changes()
 {
-    string change1 = format("1. you gain %d maximum HP per death", file.aboveMidChange)
-    string change2 = format("2. you lose %d maximum HP per kill", file.belowMidChange)
+    string change1 = format("1. you gain %d maximum HP per death", file.healthChange)
+    string change2 = format("2. you lose %d maximum HP per kill", file.healthChange)
     string change3 = format("3. minimum HP is %d, and maximum HP is %d", file.minHealth, file.maxHealth)
     string change4 = format("4. kraber and charge rifle do 120 damage")
 
@@ -83,36 +81,17 @@ void function OnClientDisconnected(entity player)
 void function AddMaxHealth(entity victim)
 {
     int currentMaxHealth = file.playerMaxHealths[victim]
-    if (currentMaxHealth >= file.maxHealth) {
-        return
-    }
-
-    if (currentMaxHealth >= file.midHealth) {
-        int newMaxHealth = minint(currentMaxHealth + file.aboveMidChange, file.maxHealth)
-        file.playerMaxHealths[victim] <- newMaxHealth
-    } else {
-        int newMaxHealth = currentMaxHealth + file.belowMidChange
-        file.playerMaxHealths[victim] <- newMaxHealth
-    }
+    int newMaxHealth = minint(currentMaxHealth + file.healthChange, file.maxHealth)
+    file.playerMaxHealths[victim] <- newMaxHealth
 }
 
 // attackers get new max health right away
 void function ReduceMaxHealth(entity attacker)
 {
     int currentMaxHealth = file.playerMaxHealths[attacker]
-    if (currentMaxHealth <= file.minHealth) {
-        return
-    }
-
-    if (currentMaxHealth > file.midHealth) {
-        int newMaxHealth = currentMaxHealth - file.aboveMidChange
-        file.playerMaxHealths[attacker] <- newMaxHealth
-        attacker.SetMaxHealth(newMaxHealth)
-    } else {
-        int newMaxHealth = maxint(currentMaxHealth - file.belowMidChange, file.minHealth)
-        file.playerMaxHealths[attacker] <- newMaxHealth
-        attacker.SetMaxHealth(newMaxHealth)
-    }
+    int newMaxHealth = maxint(currentMaxHealth - file.healthChange, file.minHealth)
+    file.playerMaxHealths[attacker] <- newMaxHealth
+    attacker.SetMaxHealth(newMaxHealth)
 }
 
 void function ShowMaxHealth(entity player)

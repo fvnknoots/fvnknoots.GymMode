@@ -1,7 +1,7 @@
 {
-    "Name": "GymMode",
+    "Name": "fvnknoots.GymMode",
     "Description": "Beginner-friendly Northstar mod",
-    "Version": "0.1.0",
+    "Version": "1.0.0",
     "LoadPriority": 1,
     "ConVars": [
         // 1 = GymMode enabled
@@ -30,18 +30,10 @@
         },
 
         // how much health to:
-        //   A) add if a player dies at middle HP or above
-        //   B) reduce if a player kills at above middle HP
+        //   A) add if a player gets killed
+        //   B) reduce if a player gets a kill
         {
-            "Name": "gymmode_above_mid_change",
-            "DefaultValue": "10"
-        },
-
-        // how much health to:
-        //   A) reduce if a player kills at middle HP or less
-        //   B) add if a player dies at below middle HP
-        {
-            "Name": "gymmode_below_mid_change",
+            "Name": "gymmode_health_change",
             "DefaultValue": "10"
         },
 
